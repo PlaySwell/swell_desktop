@@ -9,7 +9,7 @@
         "nw-builder": "^2.0.2"
     }, 
     "author": "Michael Ferguson", 
-    "user-agent": "", 
+    "user-agent": "%name %ver %nwver %webkit_ver %osinfo",
     "window": {
         "fullscreen": false, 
         "kiosk_emulation": false, 
@@ -26,7 +26,7 @@
         "as_desktop": false,
         "toolbar": false, 
         "position": "", 
-        "show_in_taskbar": false,
+        "show_in_taskbar": true,
         "mac_icon": "", 
         "width": 800,
         "transparent": false, 
