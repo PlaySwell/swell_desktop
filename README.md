@@ -1,1 +1,3 @@
-# swell_desktop
+To run:
+	nodewebkit .
+

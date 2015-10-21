@@ -1,0 +1,67 @@
+{
+    "app_name": "Shopswell",
+    "nodejs": true, 
+    "additional_trust_anchors": "", 
+    "inject-js-end": "", 
+    "node-remote": "", 
+    "keywords": [], 
+    "devDependencies": {
+        "nw-builder": "^2.0.2"
+    }, 
+    "author": "Michael Ferguson", 
+    "user-agent": "", 
+    "window": {
+        "fullscreen": false, 
+        "kiosk_emulation": false, 
+        "resizable": true,
+        "show": false,
+        "always-on-top": false,
+        "frame": true, 
+        "title": "shopswell",
+        "kiosk": false,
+        "maximize": true,
+        "height": 600,
+        "exe_icon": "", 
+        "visible": false,
+        "as_desktop": false,
+        "toolbar": false, 
+        "position": "", 
+        "show_in_taskbar": false,
+        "mac_icon": "", 
+        "width": 800,
+        "transparent": false, 
+        "icon": ""
+    }, 
+    "version": "1.0.0", 
+    "inject-js-start": "",
+    "main": "index.html",
+    "chromium-args": "", 
+    "webexe_settings": {
+        "linux-x32": false, 
+        "export_dir": "output", 
+        "windows-x64": false, 
+        "download_dir": "/Users/meister/Library/Application Support/Web2Executable/files/downloads", 
+        "nw_compression_level": 0, 
+        "mac-x32": true, 
+        "windows-x32": false, 
+        "mac-x64": true, 
+        "nw_version": "0.12.3", 
+        "force_download": false, 
+        "linux-x64": false
+    }, 
+    "description": "Shopswell App",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    }, 
+    "webkit": {
+        "page-cache": false, 
+        "java": false, 
+        "plugin": false
+    }, 
+    "js-flags": "", 
+    "name": "com.shopswell.desktop",
+    "license": "ISC", 
+    "single-instance": true, 
+    "snapshot": "", 
+    "node-main": ""
+}
