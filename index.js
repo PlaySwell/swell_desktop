@@ -4,7 +4,7 @@ var gui = require('nw.gui');
 
 var win = gui.Window.get();
 
-var new_win = gui.Window.open('http://dev.shopswell.com', {
+var new_win = gui.Window.open('https://www.shopswell.com', {
 
   "fullscreen": false,
   "kiosk_emulation": false,
