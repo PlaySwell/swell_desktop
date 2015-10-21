@@ -2,7 +2,9 @@
 
 var gui = require('nw.gui');
 
-var new_win = gui.Window.open('https://www.shopswell.com', {
+var win = gui.Window.get();
+
+var new_win = gui.Window.open('http://dev.shopswell.com', {
 
   "fullscreen": false,
   "kiosk_emulation": false,
@@ -29,16 +31,8 @@ var new_win = gui.Window.open('https://www.shopswell.com', {
 new_win.on('minimize', function() {
   // Hide window
   this.hide();
+  win.setShowInTaskbar(false)
 
-  // Show tray
-  tray = new gui.Tray({ icon: 'icon.png' });
-
-  // Show window and remove tray when clicked
-  tray.on('click', function() {
-    new_win.show();
-    this.remove();
-    tray = null;
-  });
 });
 
 new_win.on ('loaded', function(){
@@ -48,5 +42,17 @@ new_win.on ('loaded', function(){
 
 
 new_win.on ('close', function(){
-  window.close()
+  win.close()
+});
+
+
+// Show tray
+var tray = new gui.Tray({ icon: 'tray.png' });
+
+// Show window and remove tray when clicked
+tray.on('click', function() {
+  win.setShowInTaskbar(true)
+  new_win.show();
+  //this.remove();
+  //tray = null;
 });
