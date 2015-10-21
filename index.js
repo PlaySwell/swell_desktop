@@ -9,7 +9,7 @@ var new_win = gui.Window.open('http://dev.shopswell.com', {
   "fullscreen": false,
   "kiosk_emulation": false,
   "resizable": true,
-  "show": true,
+  "show": false,
   "always-on-top": false,
   "frame": true,
   "title": "Shopswell",
@@ -41,8 +41,10 @@ new_win.on ('loaded', function(){
 });
 
 
-new_win.on ('close', function(){
-  win.close()
+new_win.on ('close', function(e){
+  //e.preventDefault()
+  win.setShowInTaskbar(false)
+  new_win.hide()
 });
 
 

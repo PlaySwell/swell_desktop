@@ -1,5 +1,6 @@
 {
     "app_name": "Shopswell",
+    "private": true,
     "nodejs": true, 
     "additional_trust_anchors": "", 
     "inject-js-end": "", 
@@ -26,7 +27,7 @@
         "as_desktop": false,
         "toolbar": false, 
         "position": "", 
-        "show_in_taskbar": true,
+        "show_in_taskbar": false,
         "mac_icon": "", 
         "width": 800,
         "transparent": false, 
