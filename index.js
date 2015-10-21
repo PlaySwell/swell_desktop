@@ -30,8 +30,8 @@ var new_win = gui.Window.open('https://www.shopswell.com', {
 
 new_win.on('minimize', function() {
   // Hide window
-  this.hide();
-  win.setShowInTaskbar(false)
+  // this.hide();
+  // win.setShowInTaskbar(false)
 
 });
 
