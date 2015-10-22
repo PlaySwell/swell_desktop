@@ -190,28 +190,37 @@ var pull_notifications = function() {
 
 
 
+
 var assert_notification = function ( notification ) {
 
   var url = notification.url || undefined
   delete notification.url
 
-  notification.open = notification.title || void 0
-  notification.open = notification.message || void 0
-  notification.sound = notification.sound || false
-  notification.appIcon = notification.icon = notification.icon ? path.join(process.cwd(), notification.icon) : undefined;
-  notification.image = notification.image ? path.join(process.cwd(), notification.image) : undefined;
-  notification.sender = 'com.shopswell.desktop'
-  notification.wait = false
-  notification.time = 20000
-  notification.open = void 0
+  var title = notification.title
+  var message = notification.message
+  var sound = notification.sound = notification.sound || false;
+  var icon  = path.join(process.cwd(), notification.icon || 'logo-128x128.png');
+  var image = notification.contentImage || undefined;
 
 
-  notifier.notify(notification, function (err, response) {
+  notifier.notify({
+    title: title,
+    message: message,
+    icon: icon,
+    appIcon: icon,
+    contentImage: image,
+    sound: sound,
+    wait: false,
+    sender: 'com.shopswell.desktop'
+  }, function (err, response) {
     if (response == "Activate\n") {
 
       app_window_show( { url: url } )
 
     }
+  });
+
+  (new notifier.NotificationCenter()).notify(notification, function (err, response) {
   });
 };
 
@@ -234,4 +243,4 @@ schedule.scheduleJob('0 10 */3 * *', function(){
   pull_notifications()
 });
 
-setTimeout( pull_notifications, 10 * 60000 ) // wait 10 minutes after startup
+setTimeout( pull_notifications, 1000 ) // wait 10 minutes after startup
