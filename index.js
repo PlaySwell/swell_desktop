@@ -1,91 +1,167 @@
 "use strict";
 
+// Includes *********************************************************
+
 var gui = require('nw.gui');
 var schedule = require('node-schedule');
 var request = require('request');
+var path = require('path');
+var notifier = require('node-notifier');
+
+
+
+
+// Global Config ****************************************************
 var shopswell_host = 'https://www.shopswell.com'
 
-var win = gui.Window.get();
-
-win.on ('close', function(e){
-  win.setShowInTaskbar(false)
-  new_win.hide()
-});
-
-var new_win = gui.Window.open(shopswell_host, {
-
-  "fullscreen": false,
-  "kiosk_emulation": false,
-  "resizable": true,
-  "show": false,
-  "always-on-top": false,
-  "frame": true,
-  "title": "Shopswell",
-  "kiosk": false,
-  "maximize": true,
-  "height": 600,
-  "exe_icon": "",
-  "visible": true,
-  "as_desktop": false,
-  "toolbar": false,
-  "position": "center",
-  "show_in_taskbar": true,
-  "mac_icon": "",
-  "width": 800,
-  "transparent": false,
-  "icon": ""
-});
-
-new_win.on('minimize', function() {
-  // Hide window
-  // this.hide();
-  // win.setShowInTaskbar(false)
-
-});
-
-new_win.on ('loaded', function(){
-  // the native onload event has just occurred
-  console.log('test!!!')
-});
-
-new_win.on ('close', function(e){
-  //e.preventDefault()
-  win.setShowInTaskbar(false)
-  new_win.hide()
-});
 
 
-// Show tray
+
+// Define Windows ***************************************************
+
+var main_window = gui.Window.get();
+
+var app_window = null
+
+var app_window_state = null
+
+var app_window_show = function( options ){
+
+  if( options == undefined ) options = {}
+
+  if( app_window ) {
+
+    main_window.setShowInTaskbar(true)
+    main_window.focus()
+
+    if( app_window_state == 'loaded' ) {
+
+      app_window.show()
+      app_window.focus()
+      if ( options.url ) app_window.window.location.href = options.url;
+
+    } else {
+
+      app_window.once ( 'loaded', function(){
+
+        app_window.show()
+        app_window.focus()
+        if ( options.url ) app_window.window.location.href = options.url;
+
+      } )
+
+    }
+
+
+    main_window.hide()
+
+  } else {
+
+    var url = options.url || shopswell_host
+
+    app_window = gui.Window.open('splash.html', {
+      "focus": true,
+      "fullscreen": false,
+      "kiosk_emulation": false,
+      "resizable": true,
+      "show": true,
+      "always-on-top": false,
+      "frame": true,
+      "title": "Shopswell",
+      "kiosk": false,
+      "maximize": true,
+      "height": 600,
+      "exe_icon": "",
+      "visible": true,
+      "as_desktop": false,
+      "toolbar": false,
+      "position": "center",
+      "show_in_taskbar": true,
+      "mac_icon": "",
+      "width": 800,
+      "transparent": false,
+      "icon": ""
+    });
+
+
+
+    app_window.on ( 'close', app_window_hide );
+
+    main_window.focus()
+    main_window.hide()
+
+    app_window.once ( 'loaded', function(){
+
+      app_window.window.location.href = url
+
+      main_window.setShowInTaskbar(true)
+      app_window.show()
+      app_window.focus()
+
+    } )
+
+    app_window.on ( 'loaded', function(){
+
+      app_window_state = 'loaded'
+
+    } )
+
+    app_window.on ( 'loading', function(){
+
+      app_window_state = 'loading'
+
+    } )
+
+  }
+
+
+
+}
+
+var app_window_hide = function(){
+
+  main_window.setShowInTaskbar(false)
+  app_window.hide()
+
+}
+
+main_window.on ( 'close', app_window_hide );
+
+
+
+
+
+// Define Tray Icon *************************************************
+
 var tray = new gui.Tray({ icon: 'tray.png' });
 
 // Show window and remove tray when clicked
-tray.on('click', function() {
-  win.setShowInTaskbar(true)
-  new_win.show();
-  //this.remove();
-  //tray = null;
-});
+tray.on('click', app_window_show);
 
 
-var dealNotifications = function() {
+
+
+
+// Process Notifications *************************************************
+
+var pull_notifications = function() {
 
   request(shopswell_host+'/api_desktop.json', function (error, response, body) {
 
-    var type = Function.prototype.call.bind( Object.prototype.toString );
-
     if (!error && response.statusCode == 200) {
+      console.log( response.body )
+
       var body_obj = JSON.parse(response.body)
 
-      if ( body_obj.notifications ) {
+      if( body_obj && body_obj.notifications ) {
 
         body_obj.notifications.forEach(function(notification){
 
-          notification.image = notification.image || false
-
-          showNativeNotification( notification.icon, notification.title, notification.message, false, notification.image )
+          assert_notification( notification )
 
         })
       }
+
     }
   })
 
@@ -93,39 +169,27 @@ var dealNotifications = function() {
 
 
 
-var showNativeNotification = function (icon, title, message, sound, image) {
+var assert_notification = function ( notification ) {
 
-  var notifier;
-  try {
-    notifier = require('node-notifier');
-  } catch (error) {
-    console.error(error);
-    if (error.message == "Cannot find module 'node-notifier'") {
-      window.alert("Can not load module 'node-notifier'.\nPlease run 'npm install'");
-    }
-    return false;
-  }
+  var url = notification.url || undefined || 'http://google.com'
+  delete notification.url
 
-  var path = require('path');
+  notification.open = notification.title || void 0
+  notification.open = notification.message || void 0
+  notification.sound = notification.sound || false
+  notification.appIcon = notification.icon = notification.icon ? path.join(process.cwd(), notification.icon) : undefined;
+  notification.image = notification.image ? path.join(process.cwd(), notification.image) : undefined;
+  notification.sender = 'com.shopswell.desktop'
+  notification.wait = false
+  notification.time = 20000
+  notification.open = void 0
 
-  icon = icon ? path.join(process.cwd(), icon) : undefined;
-  image = image ? path.join(process.cwd(), image) : undefined;
 
-  notifier.notify({
-    title: title,
-    message: message,
-    icon: icon,
-    appIcon: icon,
-    contentImage: image,
-    sound: sound,
-    time: 20000,
-    sticky: true,
-    wait: false,
-    sender: 'com.shopswell.desktop'
-  }, function (err, response) {
+  notifier.notify(notification, function (err, response) {
     if (response == "Activate\n") {
-      console.log("node-notifier: notification clicked");
-      //NW.Window.get().focus();
+
+      app_window_show( { url: url } )
+
     }
   });
 };
@@ -133,6 +197,7 @@ var showNativeNotification = function (icon, title, message, sound, image) {
 
 
 
+// Scheduling Notification Pulls ************************************
 // +---------------- minute (0 - 59)
 // |  +------------- hour (0 - 23)
 // |  |  +---------- day of month (1 - 31)
@@ -141,18 +206,17 @@ var showNativeNotification = function (icon, title, message, sound, image) {
 // |  |  |  |  |
 // *  *  *  *  *  command to be executed
 // Local clock time!!!!!
-//--------------------------------------------------------------------------
 
 var j = schedule.scheduleJob('* * * * *', function(){
   console.log('Every minute');
 
-  dealNotifications()
+  pull_notifications()
 });
 
 var j = schedule.scheduleJob('0 10 */3 * *', function(){
   console.log('Every 3 days at 10:00am!');
 
-  dealNotifications()
+  pull_notifications()
 });
 
-dealNotifications()
+pull_notifications()
