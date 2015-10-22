@@ -71,16 +71,16 @@ var app_window_show = function( options ){
       "kiosk": false,
       "maximize": true,
       "height": 600,
-      "exe_icon": "",
       "visible": true,
       "as_desktop": false,
       "toolbar": false,
       "position": "center",
       "show_in_taskbar": true,
-      "mac_icon": "",
       "width": 800,
       "transparent": false,
-      "icon": ""
+      "exe_icon": "logo.ico",
+      "mac_icon": "logo.icns",
+      "icon": "logo-128x128.png"
     });
 
 
@@ -133,7 +133,7 @@ main_window.on ( 'close', app_window_hide );
 
 // Define Tray Icon *************************************************
 
-var tray = new gui.Tray({ icon: 'tray.png' });
+var tray = new gui.Tray({ icon: 'tray.png', alticon: 'tray-osx.png' });
 
 // Show window and remove tray when clicked
 tray.on('click', app_window_show);

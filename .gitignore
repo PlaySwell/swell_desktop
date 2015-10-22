@@ -7,3 +7,4 @@
 # Ignore the node package manager modules.
 /node_modules
 /npm-debug.log
+/output
