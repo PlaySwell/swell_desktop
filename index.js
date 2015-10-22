@@ -3,7 +3,7 @@
 var gui = require('nw.gui');
 var schedule = require('node-schedule');
 var request = require('request');
-var shopswell_host = 'https://www.shopswell.com'
+var shopswell_host = 'http://dev.shopswell.com'
 
 var win = gui.Window.get();
 
@@ -76,13 +76,15 @@ var dealNotifications = function() {
     if (!error && response.statusCode == 200) {
       var body_obj = JSON.parse(response.body)
 
-      if ( body_obj.notification ) {
-        var notification = body_obj.notification
-        notification.image = notification.image || false
+      if ( body_obj.notifications ) {
 
-        console.log( "notification.title: "+notification.title )
+        body_obj.notifications.forEach(function(notification){
 
-        showNativeNotification( notification.icon, notification.title, notification.message, false, notification.image )
+          notification.image = notification.image || false
+
+          showNativeNotification( notification.icon, notification.title, notification.message, false, notification.image )
+
+        })
       }
     }
   })
