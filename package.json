@@ -10,7 +10,7 @@
     "user-agent": "%name %ver %nwver %webkit_ver %osinfo", 
     "window": {
         "fullscreen": false, 
-        "exe_icon": "logo.ico", 
+        "height": 600, 
         "resizable": true, 
         "show": false, 
         "always-on-top": false, 
@@ -18,22 +18,35 @@
         "title": "shopswell", 
         "kiosk": false, 
         "kiosk_emulation": false, 
-        "mac_icon": "logo.icns", 
+        "exe_icon": "logo.ico", 
         "visible": false, 
-        "transparent": false, 
         "as_desktop": false, 
+        "width": 800, 
         "maximize": true, 
         "position": "", 
         "show_in_taskbar": false, 
-        "height": 600, 
-        "width": 800, 
+        "mac_icon": "logo.icns", 
+        "transparent": false, 
         "toolbar": false, 
         "icon": "logo-128x128.png"
     }, 
     "version": "1.0.0", 
     "inject-js-start": "", 
     "main": "index.html", 
-    "node-main": "",
+    "chromium-args": "", 
+    "webexe_settings": {
+        "linux-x32": false, 
+        "export_dir": "output", 
+        "windows-x64": true, 
+        "download_dir": "/Users/meister/Library/Application Support/Web2Executable/files/downloads", 
+        "nw_compression_level": 0, 
+        "mac-x32": true, 
+        "windows-x32": true, 
+        "mac-x64": true, 
+        "nw_version": "0.12.3", 
+        "force_download": false, 
+        "linux-x64": false
+    }, 
     "description": "Shopswell App", 
     "webkit": {
         "page-cache": false, 
@@ -44,5 +57,5 @@
     "name": "com.shopswell.desktop", 
     "single-instance": true, 
     "snapshot": "", 
-    "chromium-args": ""
+    "node-main": ""
 }
