@@ -2,6 +2,8 @@
 
 var gui = require('nw.gui');
 var schedule = require('node-schedule');
+var request = require('request');
+var shopswell_host = 'https://www.shopswell.com'
 
 var win = gui.Window.get();
 
@@ -10,7 +12,7 @@ win.on ('close', function(e){
   new_win.hide()
 });
 
-var new_win = gui.Window.open('https://www.shopswell.com', {
+var new_win = gui.Window.open(shopswell_host, {
 
   "fullscreen": false,
   "kiosk_emulation": false,
@@ -65,6 +67,29 @@ tray.on('click', function() {
 });
 
 
+var dealNotifications = function() {
+
+  request(shopswell_host+'/api_desktop.json', function (error, response, body) {
+
+    var type = Function.prototype.call.bind( Object.prototype.toString );
+
+    if (!error && response.statusCode == 200) {
+      var body_obj = JSON.parse(response.body)
+
+      if ( body_obj.notification ) {
+        var notification = body_obj.notification
+        notification.image = notification.image || false
+
+        console.log( "notification.title: "+notification.title )
+
+        showNativeNotification( notification.icon, notification.title, notification.message, false, notification.image )
+      }
+    }
+  })
+
+}
+
+
 
 var showNativeNotification = function (icon, title, message, sound, image) {
 
@@ -113,14 +138,19 @@ var showNativeNotification = function (icon, title, message, sound, image) {
 // |  |  |  |  +---- day of week (0 - 7) (Sunday=0 or 7)
 // |  |  |  |  |
 // *  *  *  *  *  command to be executed
+// Local clock time!!!!!
 //--------------------------------------------------------------------------
 
 var j = schedule.scheduleJob('* * * * *', function(){
   console.log('Every minute');
-  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+
+  dealNotifications()
 });
 
 var j = schedule.scheduleJob('0 10 */3 * *', function(){
   console.log('Every 3 days at 10:00am!');
-  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+
+  dealNotifications()
 });
+
+dealNotifications()
