@@ -3,7 +3,7 @@
 var gui = require('nw.gui');
 var schedule = require('node-schedule');
 var request = require('request');
-var shopswell_host = 'http://dev.shopswell.com'
+var shopswell_host = 'https://www.shopswell.com'
 
 var win = gui.Window.get();
 
