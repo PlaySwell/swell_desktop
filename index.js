@@ -4,6 +4,11 @@ var gui = require('nw.gui');
 
 var win = gui.Window.get();
 
+win.on ('close', function(e){
+  win.setShowInTaskbar(false)
+  new_win.hide()
+});
+
 var new_win = gui.Window.open('https://www.shopswell.com', {
 
   "fullscreen": false,
@@ -39,7 +44,6 @@ new_win.on ('loaded', function(){
   // the native onload event has just occurred
   console.log('test!!!')
 });
-
 
 new_win.on ('close', function(e){
   //e.preventDefault()
