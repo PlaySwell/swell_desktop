@@ -207,16 +207,10 @@ var assert_notification = function ( notification ) {
 // *  *  *  *  *  command to be executed
 // Local clock time!!!!!
 
-var j = schedule.scheduleJob('* * * * *', function(){
-  console.log('Every minute');
-
-  pull_notifications()
-});
-
-var j = schedule.scheduleJob('0 10 */3 * *', function(){
+schedule.scheduleJob('0 10 */3 * *', function(){
   console.log('Every 3 days at 10:00am!');
 
   pull_notifications()
 });
 
-pull_notifications()
+setTimeout( pull_notifications, 10 * 60000 ) // wait 10 minutes after startup
