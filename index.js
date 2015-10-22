@@ -138,11 +138,27 @@ main_window.on ( 'close', app_window_hide );
 
 // Define Tray Icon *************************************************
 
-var tray = new gui.Tray({ icon: 'tray.png', alticon: 'tray-osx.png' });
+var tray = new gui.Tray({ tooltip: main_window.title, icon: 'tray.png', alticon: 'tray-osx.png' });
 
 // Show window and remove tray when clicked
-tray.on('click', app_window_show);
+tray.on('click', function(){app_window_show()})
 
+
+// Give it a menu
+var menu = new gui.Menu();
+
+var open_button = new gui.MenuItem({ type: 'normal', label: 'Open' })
+open_button.on('click', function(){app_window_show()})
+
+var exit_button = new gui.MenuItem({ type: 'normal', label: 'Quit' })
+exit_button.on('click', function(){
+  gui.App.quit();
+})
+
+menu.append(open_button);
+menu.append(new gui.MenuItem({ type: 'separator' }));
+menu.append(exit_button);
+tray.menu = menu;
 
 
 
