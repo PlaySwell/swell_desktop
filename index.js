@@ -1,6 +1,7 @@
 "use strict";
 
 var gui = require('nw.gui');
+var schedule = require('node-schedule');
 
 var win = gui.Window.get();
 
@@ -62,3 +63,53 @@ tray.on('click', function() {
   //this.remove();
   //tray = null;
 });
+
+
+var j = schedule.scheduleJob('* * * * *', function(){
+  console.log('Every minute');
+  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+});
+
+var j = schedule.scheduleJob('0 10 */3 * *', function(){
+  console.log('Every 3 days at 10:00am!');
+  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+});
+
+
+
+var showNativeNotification = function (icon, title, message, sound, image) {
+
+  var notifier;
+  try {
+    notifier = require('node-notifier');
+  } catch (error) {
+    console.error(error);
+    if (error.message == "Cannot find module 'node-notifier'") {
+      window.alert("Can not load module 'node-notifier'.\nPlease run 'npm install'");
+    }
+    return false;
+  }
+
+  var path = require('path');
+
+  icon = icon ? path.join(process.cwd(), icon) : undefined;
+  image = image ? path.join(process.cwd(), image) : undefined;
+
+  notifier.notify({
+    title: title,
+    message: message,
+    icon: icon,
+    appIcon: icon,
+    contentImage: image,
+    sound: sound,
+    time: 20000,
+    sticky: true,
+    wait: false,
+    sender: 'com.shopswell.desktop'
+  }, function (err, response) {
+    if (response == "Activate\n") {
+      console.log("node-notifier: notification clicked");
+      //NW.Window.get().focus();
+    }
+  });
+};
