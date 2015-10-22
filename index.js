@@ -65,17 +65,6 @@ tray.on('click', function() {
 });
 
 
-var j = schedule.scheduleJob('* * * * *', function(){
-  console.log('Every minute');
-  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
-});
-
-var j = schedule.scheduleJob('0 10 */3 * *', function(){
-  console.log('Every 3 days at 10:00am!');
-  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
-});
-
-
 
 var showNativeNotification = function (icon, title, message, sound, image) {
 
@@ -113,3 +102,25 @@ var showNativeNotification = function (icon, title, message, sound, image) {
     }
   });
 };
+
+
+
+
+// +---------------- minute (0 - 59)
+// |  +------------- hour (0 - 23)
+// |  |  +---------- day of month (1 - 31)
+// |  |  |  +------- month (1 - 12)
+// |  |  |  |  +---- day of week (0 - 7) (Sunday=0 or 7)
+// |  |  |  |  |
+// *  *  *  *  *  command to be executed
+//--------------------------------------------------------------------------
+
+var j = schedule.scheduleJob('* * * * *', function(){
+  console.log('Every minute');
+  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+});
+
+var j = schedule.scheduleJob('0 10 */3 * *', function(){
+  console.log('Every 3 days at 10:00am!');
+  showNativeNotification( "", "Shopswell has found some great deals!", "check it out!!", false, false )
+});
