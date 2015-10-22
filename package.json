@@ -15,7 +15,7 @@
         "show": false, 
         "always-on-top": false, 
         "frame": true, 
-        "title": "shopswell", 
+        "title": "Shopswell",
         "kiosk": false, 
         "kiosk_emulation": false, 
         "exe_icon": "logo.ico", 

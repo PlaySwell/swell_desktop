@@ -67,7 +67,7 @@ var app_window_show = function( options ){
       "show": true,
       "always-on-top": false,
       "frame": true,
-      "title": "Shopswell",
+      "title": main_window.title,
       "kiosk": false,
       "maximize": true,
       "height": 600,
@@ -90,6 +90,8 @@ var app_window_show = function( options ){
     main_window.focus()
     main_window.hide()
 
+    var loading_proc = null
+
     app_window.once ( 'loaded', function(){
 
       app_window.window.location.href = url
@@ -101,14 +103,17 @@ var app_window_show = function( options ){
     } )
 
     app_window.on ( 'loaded', function(){
-
+      //app_window.title = main_window.title
+      //clearInterval( loading_proc )
       app_window_state = 'loaded'
-
     } )
 
     app_window.on ( 'loading', function(){
 
+      //app_window.title = main_window.title
+      //loading_proc = setInterval(function(){ app_window.title = main_window.title },5)
       app_window_state = 'loading'
+
 
     } )
 
@@ -171,7 +176,7 @@ var pull_notifications = function() {
 
 var assert_notification = function ( notification ) {
 
-  var url = notification.url || undefined || 'http://google.com'
+  var url = notification.url || undefined
   delete notification.url
 
   notification.open = notification.title || void 0
