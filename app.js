@@ -24,7 +24,7 @@ try {
 // Global Config ****************************************************
 var shopswell_host = process.env.SHOPSWELL_HOST || 'https://www.shopswell.com'
 
-var badge_label = '0'
+var badge_label = ''
 
 var show_in_taskbar = false
 
@@ -131,6 +131,7 @@ var app_window_show = function( options ){
         app_window.window.swell_desktop.app_window_hide = app_window_hide
         app_window.window.swell_desktop.set_badge_label = set_badge_label
         app_window.window.swell_desktop.request_attention = request_attention
+        app_window.window.swell_desktop.external_link = external_link
 
         if ( app_window.window.swell_desktop_ready ) app_window.window.swell_desktop_ready()
 
@@ -146,8 +147,6 @@ var app_window_show = function( options ){
 
     } )
 
-    set_badge_label( '' )
-
   }
 
 
@@ -162,7 +161,6 @@ var app_window_hide = function(){
 }
 
 main_window.on ( 'close', app_window_hide );
-main_window.on ( 'focus', app_window_show );
 
 
 // Helpers
@@ -180,6 +178,10 @@ var set_badge_label = function( new_badge_label ){
 var set_show_in_taskbar = function( show ) {
   show_in_taskbar = show
   main_window.setShowInTaskbar( show )
+}
+
+var external_link = function( url ) {
+  gui.Shell.openExternal( url );
 }
 
 var request_attention = function( attention ) {
