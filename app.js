@@ -170,7 +170,6 @@ var pull_notifications = function() {
   request(shopswell_host+'/api_desktop.json', function (error, response, body) {
 
     if (!error && response.statusCode == 200) {
-      console.log( response.body )
 
       var body_obj = JSON.parse(response.body)
 
@@ -201,7 +200,6 @@ var assert_notification = function ( notification ) {
   var sound = notification.sound = notification.sound || false;
   var icon  = path.join(process.cwd(), 'icons/'+(notification.icon || 'logo-32x32.png') )
   var image = notification.image ? path.join(process.cwd(), notification.image) : undefined;
-
 
   // var notification = new Notification(title, {icon: icon, body: message});
   //
