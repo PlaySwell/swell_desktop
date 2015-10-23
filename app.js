@@ -24,6 +24,9 @@ try {
 // Global Config ****************************************************
 var shopswell_host = process.env.SHOPSWELL_HOST || 'https://www.shopswell.com'
 
+var badge_label = '0'
+
+var show_in_taskbar = false
 
 
 // Define Windows ***************************************************
@@ -41,7 +44,7 @@ var app_window_show = function( options ){
 
   if( app_window ) {
 
-    main_window.setShowInTaskbar(true)
+    set_show_in_taskbar( true )
     main_window.focus()
 
     if( app_window_state == 'loaded' ) {
@@ -104,9 +107,10 @@ var app_window_show = function( options ){
 
       app_window.window.location.href = ( options.url || shopswell_host )
 
-      main_window.setShowInTaskbar(true)
+      set_show_in_taskbar( true )
       app_window.show()
       app_window.focus()
+      set_badge_label()
 
     } )
 
@@ -125,6 +129,8 @@ var app_window_show = function( options ){
         app_window.window.swell_desktop.pull_notifications = pull_notifications
         app_window.window.swell_desktop.app_window_show = app_window_show
         app_window.window.swell_desktop.app_window_hide = app_window_hide
+        app_window.window.swell_desktop.set_badge_label = set_badge_label
+        app_window.window.swell_desktop.request_attention = request_attention
 
         if ( app_window.window.swell_desktop_ready ) app_window.window.swell_desktop_ready()
 
@@ -140,6 +146,8 @@ var app_window_show = function( options ){
 
     } )
 
+    set_badge_label( '' )
+
   }
 
 
@@ -148,15 +156,50 @@ var app_window_show = function( options ){
 
 var app_window_hide = function(){
 
-  main_window.setShowInTaskbar(false)
+  set_show_in_taskbar( false )
   app_window.hide()
 
 }
 
 main_window.on ( 'close', app_window_hide );
+main_window.on ( 'focus', app_window_show );
 
 
+// Helpers
 
+var set_badge_label = function( new_badge_label ){
+
+  if( !(new_badge_label == undefined) ) badge_label = ''+new_badge_label
+
+  main_window.setBadgeLabel(badge_label)
+  if ( app_window ) app_window.setBadgeLabel(badge_label)
+
+
+}
+
+var set_show_in_taskbar = function( show ) {
+  show_in_taskbar = show
+  main_window.setShowInTaskbar( show )
+}
+
+var request_attention = function( attention ) {
+
+  if ( attention )
+  {
+    var current_show_in_taskbar = show_in_taskbar
+    set_show_in_taskbar( true )
+    show_in_taskbar = false
+
+    main_window.requestAttention(attention)
+    if ( app_window ) app_window.requestAttention(attention)
+
+
+    setTimeout( function(){
+      set_show_in_taskbar( current_show_in_taskbar || show_in_taskbar )
+    }, 2000 )
+
+  }
+}
 
 
 // Define Tray Icon *************************************************
@@ -203,6 +246,9 @@ var pull_notifications = function() {
     if (!error && response.statusCode == 200) {
 
       var body_obj = JSON.parse(response.body)
+
+      request_attention( body_obj.request_attention )
+      set_badge_label( body_obj.badge_label )
 
       if( body_obj && body_obj.notifications ) {
 
