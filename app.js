@@ -6,6 +6,7 @@ var gui = require('nw.gui');
 var schedule = require('node-schedule');
 var request = require('request');
 var notifier = require('node-notifier');
+var path = require('path');
 
 
 
@@ -198,8 +199,8 @@ var assert_notification = function ( notification ) {
   var title = notification.title
   var message = notification.message
   var sound = notification.sound = notification.sound || false;
-  var icon  = './icons/'+(notification.icon || 'logo-32x32.png')
-  var image = notification.contentImage || undefined;
+  var icon  = path.join(process.cwd(), 'icons/'+(notification.icon || 'logo-32x32.png') )
+  var image = notification.image ? path.join(process.cwd(), notification.image) : undefined;
 
 
   // var notification = new Notification(title, {icon: icon, body: message});
