@@ -28,6 +28,7 @@ var shopswell_host = process.env.SHOPSWELL_HOST || 'https://www.shopswell.com'
 // Define Windows ***************************************************
 
 var main_window = gui.Window.get();
+var user_agent = main_window.window.navigator.userAgent
 
 var app_window = null
 
@@ -173,7 +174,15 @@ tray.menu = menu;
 
 var pull_notifications = function() {
 
-  request(shopswell_host+'/api_desktop.json', function (error, response, body) {
+  var options = {
+    url: shopswell_host+'/api_desktop.json',
+    headers: {
+      'User-Agent': user_agent
+    }
+  };
+
+
+  request(options, function (error, response, body) {
 
     if (!error && response.statusCode == 200) {
 
@@ -258,7 +267,7 @@ var assert_notification = function ( notification ) {
     wait: true,
     time: 30000,
     sticky: false,
-    sender: 'com.shopswell.nwjs.desktop'
+    sender: 'com.shopswell.desktop'
   }, function (err, response) {
     if (response == "Activate\n") {
 

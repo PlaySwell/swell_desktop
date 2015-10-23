@@ -1,6 +1,6 @@
 {
-    "app-id": "com.shopswell.nwjs.desktop", 
-    "app_name": "shopswelldesktop", 
+    "app-id": "com.shopswell.desktop",
+    "app_name": "Shopswell",
     "nodejs": true, 
     "additional_trust_anchors": "", 
     "private": true, 
@@ -48,7 +48,7 @@
         "force_download": false, 
         "linux-x64": false
     }, 
-    "description": "Shopswell App", 
+    "description": "Shopswell App.",
     "dependencies": {
         "node-schedule": "0.2.9", 
         "request": "2.65.0", 
@@ -64,7 +64,7 @@
         "plugin": true
     }, 
     "js-flags": "", 
-    "name": "nw-shopswelldesktop", 
+    "name": "com.shopswell.desktop",
     "single-instance": true, 
     "snapshot": "", 
     "chromium-args": ""
