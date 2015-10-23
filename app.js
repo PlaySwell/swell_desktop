@@ -111,9 +111,24 @@ var app_window_show = function( options ){
     } )
 
     app_window.on ( 'loaded', function(){
-      //app_window.title = main_window.title
-      //clearInterval( loading_proc )
+
       app_window_state = 'loaded'
+
+      if ( !app_window.window.swell_desktop && shopswell_host.indexOf(app_window.window.location.host) >= 0 )
+      {
+
+        app_window.window.swell_desktop = function(){
+
+        }
+        app_window.window.swell_desktop.version = gui.App.manifest.version
+        app_window.window.swell_desktop.assert_notification = assert_notification
+        app_window.window.swell_desktop.pull_notifications = pull_notifications
+        app_window.window.swell_desktop.app_window_show = app_window_show
+        app_window.window.swell_desktop.app_window_hide = app_window_hide
+
+        if ( app_window.window.swell_desktop_ready ) app_window.window.swell_desktop_ready()
+
+      }
     } )
 
     app_window.on ( 'loading', function(){
