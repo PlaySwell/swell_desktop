@@ -186,8 +186,10 @@ var pull_notifications = function() {
 }
 
 
-var process_image = function( image, args )
+var image_path = function( image, args )
 {
+  var full_path = null
+
   if( args == undefined ) args = {}
 
   args.path = args.path || './'
@@ -198,17 +200,19 @@ var process_image = function( image, args )
 
     if( image_url.host )
     {
-      return image
+      full_path = image
     }
     else
     {
-      return path.join(process.cwd(), args.path+image)
+      full_path = 'file://'+path.join(process.cwd(), args.path+image)
     }
   }
   else
   {
-    return args.default_image ? path.join(process.cwd(), args.path+args.default_image) : undefined;
+    full_path = args.default_image ? 'file://'+path.join(process.cwd(), args.path+args.default_image) : undefined;
   }
+
+  return full_path
 
 }
 
@@ -223,8 +227,8 @@ var assert_notification = function ( notification ) {
   var title   = notification.title
   var message = notification.message
   var sound   = notification.sound = notification.sound || false;
-  var icon    = process_image( notification.icon, { path: 'icons/', default_image: 'logo-32x32.png' } )
-  var image   = process_image( notification.image, { path: 'icons/' } )
+  var icon    = image_path( notification.icon, { path: 'icons/', default_image: 'logo-32x32.png' } )
+  var image   = image_path( notification.image, { path: 'icons/' } )
 
   //console.log(image)
 
@@ -242,6 +246,8 @@ var assert_notification = function ( notification ) {
     contentImage: image,
     sound: sound,
     wait: true,
+    time: 30000,
+    sticky: false,
     sender: 'com.shopswell.nwjs.desktop'
   }, function (err, response) {
     if (response == "Activate\n") {
