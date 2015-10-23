@@ -1,5 +1,6 @@
 {
-    "app_name": "Shopswell", 
+    "app-id": "com.shopswell.nwjs.desktop", 
+    "app_name": "shopswelldesktop", 
     "nodejs": true, 
     "additional_trust_anchors": "", 
     "private": true, 
@@ -11,28 +12,28 @@
     "window": {
         "fullscreen": false, 
         "resizable": true, 
-        "show": false, 
+        "title": "Shopswell", 
         "always-on-top": false, 
         "frame": true, 
-        "title": "Shopswell", 
+        "show": false, 
         "kiosk": false, 
         "height": 600, 
-        "exe_icon": "logo.ico", 
+        "exe_icon": "./icons/logo.ico", 
         "visible": false, 
-        "transparent": false, 
         "as_desktop": false, 
-        "toolbar": false, 
+        "width": 800, 
         "maximize": true, 
+        "mac_icon": "./mac_files/app.icns", 
         "position": "", 
         "show_in_taskbar": false, 
         "kiosk_emulation": false, 
-        "width": 800, 
-        "mac_icon": "logo.icns", 
-        "icon": "logo-128x128.png"
+        "transparent": false, 
+        "toolbar": false, 
+        "icon": "./icons/logo-128x128.png"
     }, 
     "version": "1.0.0", 
     "inject-js-start": "", 
-    "main": "index.html", 
+    "main": "app.html", 
     "node-main": "", 
     "webexe_settings": {
         "linux-x32": false, 
@@ -48,13 +49,21 @@
         "linux-x64": false
     }, 
     "description": "Shopswell App", 
+    "dependencies": {
+        "node-schedule": "0.2.9", 
+        "request": "2.65.0", 
+        "node-notifier": "4.2.1"
+    }, 
+    "scripts": {
+        "start": "nw ."
+    }, 
     "webkit": {
         "page-cache": false, 
         "java": false, 
         "plugin": true
     }, 
     "js-flags": "", 
-    "name": "com.shopswell.desktop", 
+    "name": "nw-shopswelldesktop", 
     "single-instance": true, 
     "snapshot": "", 
     "chromium-args": ""
