@@ -7,13 +7,13 @@ var schedule = require('node-schedule');
 var request = require('request');
 var notifier = require('node-notifier');
 var path = require('path');
+var url = require('url');
 
 
 
 
 // Global Config ****************************************************
-var shopswell_host = 'https://www.shopswell.com'
-
+var shopswell_host = process.env.SHOPSWELL_HOST || 'https://www.shopswell.com'
 
 
 
@@ -57,8 +57,6 @@ var app_window_show = function( options ){
 
   } else {
 
-    var url = options.url || shopswell_host
-
     app_window = gui.Window.open('splash.html', {
       "focus": true,
       "fullscreen": false,
@@ -94,7 +92,7 @@ var app_window_show = function( options ){
 
     app_window.once ( 'loaded', function(){
 
-      app_window.window.location.href = url
+      app_window.window.location.href = ( options.url || shopswell_host )
 
       main_window.setShowInTaskbar(true)
       app_window.show()
@@ -188,23 +186,52 @@ var pull_notifications = function() {
 }
 
 
+var process_image = function( image, args )
+{
+  if( args == undefined ) args = {}
+
+  args.path = args.path || './'
+
+  if( image )
+  {
+    var image_url = url.parse(image)
+
+    if( image_url.host )
+    {
+      return image
+    }
+    else
+    {
+      return path.join(process.cwd(), args.path+image)
+    }
+  }
+  else
+  {
+    return args.default_image ? path.join(process.cwd(), args.path+args.default_image) : undefined;
+  }
+
+}
 
 
 var assert_notification = function ( notification ) {
 
-  var url = notification.url || undefined
+  //console.log( JSON.stringify(notification) )
+
+  var app_window_url = notification.url || undefined
   delete notification.url
 
-  var title = notification.title
+  var title   = notification.title
   var message = notification.message
-  var sound = notification.sound = notification.sound || false;
-  var icon  = path.join(process.cwd(), 'icons/'+(notification.icon || 'logo-32x32.png') )
-  var image = notification.image ? path.join(process.cwd(), notification.image) : undefined;
+  var sound   = notification.sound = notification.sound || false;
+  var icon    = process_image( notification.icon, { path: 'icons/', default_image: 'logo-32x32.png' } )
+  var image   = process_image( notification.image, { path: 'icons/' } )
+
+  //console.log(image)
 
   // var notification = new Notification(title, {icon: icon, body: message});
   //
   // notification.onclick = function () {
-  //   app_window_show( { url: url } )
+  //   app_window_show( { url: app_window_url } )
   // };
 
   notifier.notify({
@@ -219,7 +246,7 @@ var assert_notification = function ( notification ) {
   }, function (err, response) {
     if (response == "Activate\n") {
 
-      app_window_show( { url: url } )
+      app_window_show( { url: app_window_url } )
 
     }
   });
