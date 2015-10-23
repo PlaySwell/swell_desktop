@@ -10,6 +10,14 @@ var path = require('path');
 var url = require('url');
 
 
+// Initialize
+try {
+  //needed for toasting... should be done in installer.
+  gui.App.createShortcut(process.env.APPDATA + "\\Microsoft\\Windows\\Start Menu\\Programs\\Shopswell.lnk");
+} catch (e)
+{
+  console.error(e)
+}
 
 
 // Global Config ****************************************************
@@ -230,14 +238,16 @@ var assert_notification = function ( notification ) {
   var icon    = image_path( notification.icon, { path: 'icons/', default_image: 'logo-32x32.png' } )
   var image   = image_path( notification.image, { path: 'icons/' } )
 
-  //console.log(image)
 
-  // var notification = new Notification(title, {icon: icon, body: message});
-  //
-  // notification.onclick = function () {
-  //   app_window_show( { url: app_window_url } )
-  // };
+  /*
+  var notification = new Notification(title, {icon: image, body: message});
 
+  notification.onclick = function () {
+    app_window_show( { url: app_window_url } )
+  };
+  //*/
+
+  //*
   notifier.notify({
     title: title,
     message: message,
@@ -256,6 +266,7 @@ var assert_notification = function ( notification ) {
 
     }
   });
+  //*/
 
 };
 
