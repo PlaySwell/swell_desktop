@@ -8,9 +8,10 @@ var request = require('request');
 var notifier = require('node-notifier');
 var path = require('path');
 var url = require('url');
+//var wakeEvent = require('wake-event');
 
 
-// Initialize
+// Initialize *******************************************************
 try {
   //needed for toasting... should be done in installer.
   gui.App.createShortcut(process.env.APPDATA + "\\Microsoft\\Windows\\Start Menu\\Programs\\Shopswell.lnk");
@@ -282,7 +283,7 @@ var assert_notification = function ( notification ) {
 
 
 
-// Scheduling Notification Pulls ************************************
+// Scheduling Notification PULLs ************************************
 // +---------------- minute (0 - 59)
 // |  +------------- hour (0 - 23)
 // |  |  +---------- day of month (1 - 31)
@@ -292,10 +293,38 @@ var assert_notification = function ( notification ) {
 // *  *  *  *  *  command to be executed
 // Local clock time!!!!!
 
-schedule.scheduleJob('0 10 */3 * *', function(){
-  console.log('Every 3 days at 10:00am!');
+var last_pull = null
 
+//PULL Every 3 days at 10:00am!
+schedule.scheduleJob('0 10 */3 * *', function(){
+  last_pull = Date.now()
   pull_notifications()
 });
 
-setTimeout( pull_notifications, 1000 ) // wait 10 minutes after startup
+// PULL 1 minute after startup
+setTimeout( function(){
+  last_pull = Date.now()
+  pull_notifications()
+}, 60000 )
+
+// After computer wakes up, check to see how long it has been since the last
+// PULL, and do so if it has been more than 3 days.
+// wakeEvent(function () {
+//
+//   var one_day=1000*60*60*24;
+//
+//   // Convert both dates to milliseconds
+//   var date1_ms = (last_pull || Date.now()).getTime();
+//   var date2_ms = Date.now().getTime();
+//
+//   // Calculate the difference in milliseconds
+//   var difference_ms = date2_ms - date1_ms;
+//
+//   // Convert back to day
+//   var difference_days = Math.round(difference_ms/one_day)
+//
+//   //If it has been more than 3 days since last pull, do so
+//   if( difference_days > 3 ) pull_notifications()
+//
+//
+// });

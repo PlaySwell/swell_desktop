@@ -27,4 +27,5 @@ touch node_modules/nw/nwjs/nwjs.app/Contents/Info.plist
 * [node-schedule](https://github.com/tejasmanohar/node-schedule)
 * [request](https://github.com/request/request)
 * [path](https://github.com/jinder/path)
+* [wake-event](https://github.com/HenrikJoreteg/wake-event)
 
