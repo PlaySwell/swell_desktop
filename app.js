@@ -105,7 +105,7 @@ var app_window_show = function( options ){
 
     app_window.once ( 'loaded', function(){
 
-      app_window.window.location.href = ( options.url || shopswell_host )
+      app_window.window.location.href = ( options.url || shopswell_host )+'?dvar=desktop_app'
 
       set_show_in_taskbar( true )
       app_window.show()
@@ -236,7 +236,7 @@ tray.menu = menu;
 var pull_notifications = function() {
 
   var options = {
-    url: shopswell_host+'/api_desktop.json',
+    url: shopswell_host+'/api_desktop.json?dvar=desktop_app',
     headers: {
       'User-Agent': user_agent
     }
