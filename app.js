@@ -14,7 +14,7 @@ var url = require('url');
 // Initialize *******************************************************
 try {
   //needed for toasting... should be done in installer.
-  gui.App.createShortcut(process.env.APPDATA + "\\Microsoft\\Windows\\Start Menu\\Programs\\Shopswell.lnk");
+  // gui.App.createShortcut(process.env.APPDATA + "\\Microsoft\\Windows\\Start Menu\\Programs\\Shopswell.lnk");
 } catch (e)
 {
   console.error(e)
